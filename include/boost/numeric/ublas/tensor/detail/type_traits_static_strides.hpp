@@ -15,44 +15,52 @@
 
 #include <boost/numeric/ublas/tensor/detail/basic_type_traits.hpp>
 
-namespace boost::numeric::ublas{
-    
+namespace boost::numeric::ublas
+{
+
 template <class ExtentsType, ExtentsType... E> struct basic_static_extents;
 
 template <class E, class L> struct basic_static_strides;
 
 } // namespace boost::numeric::ublas
 
-namespace boost::numeric::ublas{
-      
-  template <class L, class T, T... E>
-  struct is_strides< basic_static_strides< basic_static_extents<T, E...>, L > > : std::true_type {};
+namespace boost::numeric::ublas
+{
 
-  template <class T, T... E, class L>
-  struct is_static< basic_static_strides< basic_static_extents<T, E...>, L > > : std::true_type {};
+template <class L, class T, T... E>
+struct is_strides<basic_static_strides<basic_static_extents<T, E...>, L>> : std::true_type
+{
+};
 
-  template <class T, T... E, class L>
-  struct is_static_rank< basic_static_strides< basic_static_extents<T, E...>, L > > : std::true_type {};
+template <class T, T... E, class L>
+struct is_static<basic_static_strides<basic_static_extents<T, E...>, L>> : std::true_type
+{
+};
 
-  namespace detail{
+template <class T, T... E, class L>
+struct is_static_rank<basic_static_strides<basic_static_extents<T, E...>, L>> : std::true_type
+{
+};
 
-    /** @brief Partial Specialization of strides for basic_static_extents
-     *
-     *
-     * @tparam Layout either first_order or last_order
-     *
-     * @tparam R rank of extents
-     *
-     * @tparam Extents parameter pack of extents
-     *
-     */
-    template <class Layout, class T, T... Extents>
-    struct strides_impl<basic_static_extents<T, Extents...>, Layout>
-    {
-      using type = basic_static_strides<basic_static_extents<T, Extents...>, Layout>;
-    };
+namespace detail
+{
 
-  } // detail
+/** @brief Partial Specialization of strides for basic_static_extents
+ *
+ *
+ * @tparam Layout either first_order or last_order
+ *
+ * @tparam R rank of extents
+ *
+ * @tparam Extents parameter pack of extents
+ *
+ */
+template <class Layout, class T, T... Extents> struct strides_impl<basic_static_extents<T, Extents...>, Layout>
+{
+    using type = basic_static_strides<basic_static_extents<T, Extents...>, Layout>;
+};
+
+} // namespace detail
 
 } // namespace boost::numeric::ublas
 

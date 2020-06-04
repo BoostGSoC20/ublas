@@ -13,53 +13,56 @@
 #ifndef BOOST_UBLAS_TENSOR_BASIC_TYPE_TRAITS_HPP
 #define BOOST_UBLAS_TENSOR_BASIC_TYPE_TRAITS_HPP
 
-#include <type_traits>
 #include <cstddef>
+#include <type_traits>
 
-namespace boost::numeric::ublas {
-  
+namespace boost::numeric::ublas
+{
+
 /** @brief Checks if the extents or strides is dynamic
  *
  * @tparam E of type basic_extents or basic_static_extents
  *
  */
-template <class E> struct is_dynamic : std::false_type {};
+template <class E> struct is_dynamic : std::false_type
+{
+};
 
-template <class E> 
-inline static constexpr bool const is_dynamic_v = is_dynamic<E>::value;
+template <class E> inline static constexpr bool const is_dynamic_v = is_dynamic<E>::value;
 
 /** @brief Checks if the extents or strides is static
  *
  * @tparam E of type basic_extents or basic_static_extents
  *
  */
-template <class E> struct is_static : std::false_type {};
+template <class E> struct is_static : std::false_type
+{
+};
 
-template <class E> 
-inline static constexpr bool const is_static_v = is_static<E>::value;
+template <class E> inline static constexpr bool const is_static_v = is_static<E>::value;
 
 /** @brief Checks if the extents or strides has dynamic rank
  *
  * @tparam E of type basic_extents or basic_static_extents
  *
  */
-template <class E> 
-struct is_dynamic_rank : std::false_type {};
+template <class E> struct is_dynamic_rank : std::false_type
+{
+};
 
-template <class E> 
-inline static constexpr bool const is_dynamic_rank_v = is_dynamic_rank<E>::value;
+template <class E> inline static constexpr bool const is_dynamic_rank_v = is_dynamic_rank<E>::value;
 
 /** @brief Checks if the extents or strides has static rank
  *
  * @tparam E of type basic_extents or basic_static_extents
  *
  */
-template <class E> 
-struct is_static_rank : std::false_type {};
+template <class E> struct is_static_rank : std::false_type
+{
+};
 
-template <class E> 
-inline static constexpr bool const is_static_rank_v = is_static_rank<E>::value;
+template <class E> inline static constexpr bool const is_static_rank_v = is_static_rank<E>::value;
 
-} // namespace boost::numeric::ublas::detail
+} // namespace boost::numeric::ublas
 
 #endif

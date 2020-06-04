@@ -10,33 +10,36 @@
 //  Google and Fraunhofer IOSB, Ettlingen, Germany
 //
 
-
 #ifndef _BOOST_NUMERIC_UBLAS_TENSOR_DYNAMIC_EXTENTS_HPP_
 #define _BOOST_NUMERIC_UBLAS_TENSOR_DYNAMIC_EXTENTS_HPP_
 
+#include <boost/numeric/ublas/tensor/detail/extents_functions.hpp>
+#include <boost/numeric/ublas/tensor/type_traits.hpp>
 #include <initializer_list>
 #include <limits>
 #include <stdexcept>
 #include <vector>
-#include <boost/numeric/ublas/tensor/type_traits.hpp>
-#include <boost/numeric/ublas/tensor/detail/extents_functions.hpp>
 
-namespace boost {
-namespace numeric {
-namespace ublas {
+namespace boost
+{
+namespace numeric
+{
+namespace ublas
+{
 
 /** @brief Template class for storing tensor extents with runtime variable size.
  *
  * Proxy template class of std::vector<int_type>.
  *
  */
-template<class int_type>
-class basic_extents
+template <class int_type> class basic_extents
 {
-    static_assert( std::numeric_limits<typename std::vector<int_type>::value_type>::is_integer, "Static error in basic_layout: type must be of type integer.");
-    static_assert(!std::numeric_limits<typename std::vector<int_type>::value_type>::is_signed,  "Static error in basic_layout: type must be of type unsigned integer.");
+    static_assert(std::numeric_limits<typename std::vector<int_type>::value_type>::is_integer,
+                  "Static error in basic_layout: type must be of type integer.");
+    static_assert(!std::numeric_limits<typename std::vector<int_type>::value_type>::is_signed,
+                  "Static error in basic_layout: type must be of type unsigned integer.");
 
-public:
+  public:
     using base_type = std::vector<int_type>;
     using value_type = typename base_type::value_type;
     using const_reference = typename base_type::const_reference;
@@ -45,13 +48,11 @@ public:
     using const_pointer = typename base_type::const_pointer;
     using const_iterator = typename base_type::const_iterator;
 
-
     /** @brief Default constructs basic_extents
      *
      * @code auto ex = basic_extents<unsigned>{};
      */
-    basic_extents()
-      : _base{}
+    basic_extents() : _base{}
     {
     }
 
@@ -63,11 +64,12 @@ public:
      *
      * @param b one-dimensional std::vector<int_type> container
      */
-    explicit basic_extents(base_type const& b)
-      : _base(b)
+    explicit basic_extents(base_type const &b) : _base(b)
     {
-        if ( !valid(*this) ){
-            throw std::length_error("Error in basic_extents::basic_extents() : shape tuple is not a valid permutation: has zero elements.");
+        if (!valid(*this))
+        {
+            throw std::length_error(
+                "Error in basic_extents::basic_extents() : shape tuple is not a valid permutation: has zero elements.");
         }
     }
 
@@ -79,11 +81,12 @@ public:
      *
      * @param b one-dimensional container of type std::vector<int_type>
      */
-    explicit basic_extents(base_type && b)
-      : _base(std::move(b))
+    explicit basic_extents(base_type &&b) : _base(std::move(b))
     {
-        if (!valid(*this)){
-            throw std::length_error("Error in basic_extents::basic_extents() : shape tuple is not a valid permutation: has zero elements.");
+        if (!valid(*this))
+        {
+            throw std::length_error(
+                "Error in basic_extents::basic_extents() : shape tuple is not a valid permutation: has zero elements.");
         }
     }
 
@@ -95,8 +98,7 @@ public:
      *
      * @param l one-dimensional list of type std::initializer<int_type>
      */
-    basic_extents(std::initializer_list<value_type> l)
-      : basic_extents( base_type(std::move(l)) )
+    basic_extents(std::initializer_list<value_type> l) : basic_extents(base_type(std::move(l)))
     {
     }
 
@@ -109,128 +111,105 @@ public:
      * @param first iterator pointing to the first element
      * @param last iterator pointing to the next position after the last element
      */
-    basic_extents(const_iterator first, const_iterator last)
-      : basic_extents ( base_type( first,last ) )
+    basic_extents(const_iterator first, const_iterator last) : basic_extents(base_type(first, last))
     {
     }
 
     /** @brief Copy constructs basic_extents */
-    basic_extents(basic_extents const& l )
-      : _base(l._base)
+    basic_extents(basic_extents const &l) : _base(l._base)
     {
     }
 
     /** @brief Move constructs basic_extents */
-    basic_extents(basic_extents && l ) noexcept
-      : _base(std::move(l._base))
+    basic_extents(basic_extents &&l) noexcept : _base(std::move(l._base))
     {
     }
 
-
-    template<typename OtherExtentsType,
-        std::enable_if_t< 
-            is_extents<OtherExtentsType>::value
-            ,int > = 0
-    >
-    basic_extents(OtherExtentsType const& e)
-        : _base(e.size())
+    template <typename OtherExtentsType, std::enable_if_t<is_extents<OtherExtentsType>::value, int> = 0>
+    basic_extents(OtherExtentsType const &e) : _base(e.size())
     {
-        std::copy(e.begin(),e.end(), _base.begin());
+        std::copy(e.begin(), e.end(), _base.begin());
     }
 
     ~basic_extents() = default;
 
-    basic_extents& operator=(basic_extents other) noexcept
+    basic_extents &operator=(basic_extents other) noexcept
     {
-        swap (*this, other);
+        swap(*this, other);
         return *this;
     }
 
-    friend void swap(basic_extents& lhs, basic_extents& rhs) {
-        std::swap(lhs._base   , rhs._base   );
+    friend void swap(basic_extents &lhs, basic_extents &rhs)
+    {
+        std::swap(lhs._base, rhs._base);
     }
 
-    [[nodiscard]] inline
-    constexpr const_pointer data() const
+    [[nodiscard]] inline constexpr const_pointer data() const
     {
         return this->_base.data();
     }
 
-    [[nodiscard]] inline
-    constexpr const_reference operator[] (size_type p) const noexcept
+    [[nodiscard]] inline constexpr const_reference operator[](size_type p) const noexcept
     {
         return this->_base[p];
     }
 
-    [[nodiscard]] inline
-    constexpr const_reference at (size_type p) const
+    [[nodiscard]] inline constexpr const_reference at(size_type p) const
     {
         return this->_base.at(p);
     }
 
-    [[nodiscard]] inline
-    constexpr reference operator[] (size_type p)
+    [[nodiscard]] inline constexpr reference operator[](size_type p)
     {
         return this->_base[p];
     }
 
-    [[nodiscard]] inline
-    constexpr reference at (size_type p)
+    [[nodiscard]] inline constexpr reference at(size_type p)
     {
         return this->_base.at(p);
     }
 
-    [[nodiscard]] inline
-    constexpr const_reference back () const
+    [[nodiscard]] inline constexpr const_reference back() const
     {
         return this->_base.back();
     }
 
-
-    [[nodiscard]] inline
-    constexpr bool empty() const
+    [[nodiscard]] inline constexpr bool empty() const
     {
         return this->_base.empty();
     }
 
-    [[nodiscard]] inline
-    constexpr size_type size() const
+    [[nodiscard]] inline constexpr size_type size() const
     {
         return this->_base.size();
     }
 
-    inline
-    constexpr void clear()
+    inline constexpr void clear()
     {
         this->_base.clear();
     }
 
-    [[nodiscard]] inline
-    constexpr const_iterator
-    begin() const
+    [[nodiscard]] inline constexpr const_iterator begin() const
     {
         return _base.begin();
     }
 
-    [[nodiscard]] inline
-    constexpr const_iterator
-    end() const
+    [[nodiscard]] inline constexpr const_iterator end() const
     {
         return _base.end();
     }
 
-    [[nodiscard]] inline
-    constexpr base_type const& base() const { return _base; }
+    [[nodiscard]] inline constexpr base_type const &base() const
+    {
+        return _base;
+    }
 
-private:
-
+  private:
     base_type _base;
-
 };
 
 } // namespace ublas
 } // namespace numeric
 } // namespace boost
-
 
 #endif

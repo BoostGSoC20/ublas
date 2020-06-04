@@ -15,43 +15,47 @@
 
 #include <boost/numeric/ublas/tensor/detail/basic_type_traits.hpp>
 
-namespace boost::numeric::ublas{
-    
-template<class int_type> class basic_extents;
+namespace boost::numeric::ublas
+{
 
-template<class T, class L>
-class basic_strides;
+template <class int_type> class basic_extents;
+
+template <class T, class L> class basic_strides;
 
 } // namespace boost::numeric::ublas
 
-namespace boost::numeric::ublas{
-    
-    template <class L, class T> 
-    struct is_strides<basic_strides<T,L>> : std::true_type {};
+namespace boost::numeric::ublas
+{
 
-    template <class T, class L>
-    struct is_dynamic< basic_strides<T,L> > : std::true_type {};
+template <class L, class T> struct is_strides<basic_strides<T, L>> : std::true_type
+{
+};
 
-    template <class T, class L>
-    struct is_dynamic_rank< basic_strides<T, L> > : std::true_type {};
+template <class T, class L> struct is_dynamic<basic_strides<T, L>> : std::true_type
+{
+};
 
-    namespace detail{
-        
-        /** @brief Partial Specialization of strides for basic_extents
-         *
-         *
-         * @tparam Layout either first_order or last_order
-         *
-         * @tparam T extents type
-         *
-         */
-        template <class Layout, class T>
-        struct strides_impl<basic_extents<T>, Layout>
-        {
-            using type = basic_strides<T, Layout>;
-        };
-        
-    } // detail
+template <class T, class L> struct is_dynamic_rank<basic_strides<T, L>> : std::true_type
+{
+};
+
+namespace detail
+{
+
+/** @brief Partial Specialization of strides for basic_extents
+ *
+ *
+ * @tparam Layout either first_order or last_order
+ *
+ * @tparam T extents type
+ *
+ */
+template <class Layout, class T> struct strides_impl<basic_extents<T>, Layout>
+{
+    using type = basic_strides<T, Layout>;
+};
+
+} // namespace detail
 
 } // namespace boost::numeric::ublas
 
