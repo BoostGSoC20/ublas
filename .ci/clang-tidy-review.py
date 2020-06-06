@@ -31,6 +31,7 @@ def make_file_line_lookup(diff):
             for line in hunk:
                 if not line.is_removed:
                     lookup[filename][line.target_line_no] = line.diff_line_no - 5
+    print(lookup)
     return lookup
 
 
@@ -43,6 +44,7 @@ def make_review(contents, lookup):
         if "warning" in line:
             full_path, source_line, _, warning = line.split(":", maxsplit=3)
             rel_path = os.path.relpath(full_path, root)
+            print(rel_path, source_line)
             body = ""
             for line2 in contents[num + 1 :]:
                 if "warning" in line2:
