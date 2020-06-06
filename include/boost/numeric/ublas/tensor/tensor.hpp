@@ -553,6 +553,13 @@ template <class T> class basic_tensor : public detail::tensor_expression<basic_t
     {
         return data_.rend();
     }
+    
+    /// \brief Return a const reverse iterator on the end of the reverse basic_tensor (i.e. first element of the normal
+    /// basic_tensor)
+    inline const_reverse_iterator rend2() const
+    {
+        return data_.rend();
+    }
 
     /// \brief Return a const reverse iterator on the end of the reverse basic_tensor (i.e. first element of the normal
     /// basic_tensor)
