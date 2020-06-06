@@ -193,15 +193,15 @@ template <class T> class basic_tensor : public detail::tensor_expression<basic_t
     //  *  @param e initial basic_tensor dimension extents
     //  *  @param i initial value of all elements of type \c value_type
     //  */
-     template<class U = E>
-     inline
-     basic_tensor (shape_t<typename extents_type::value_type, dynamic_rank> const& e, const value_type &i, typename
-     std::enable_if<detail::is_static_extents<U>::value>::type* = nullptr)
-      : tensor_expression_type<self_type>() //tensor_container<self_type> ()
-      , extents_ (e.begin(),e.end())
-      , strides_ (extents_)
-      , data_    (product(extents_), i)
-     {}
+    // template<class U>
+    // inline
+    // basic_tensor (shape_t<typename extents_type::value_type, dynamic_rank> const& e, const value_type &i, typename
+    // std::enable_if<detail::is_static_extents<U>::value>::type* = nullptr)
+    //  : tensor_expression_type<self_type>() //tensor_container<self_type> ()
+    //  , extents_ (e.begin(),e.end())
+    //  , strides_ (extents_)
+    //  , data_    (product(extents_), i)
+    // {}
 
   public:
     /** @brief Constructs a basic_tensor with another basic_tensor with a different layout
@@ -209,7 +209,7 @@ template <class T> class basic_tensor : public detail::tensor_expression<basic_t
      * @param other basic_tensor with a different layout to be copied.
      */
     template <typename OtherTensor>
-    basic_tensor(const basic_tensor<OtherTensor> &other) : basic_tensor(other.extents(), container_tag{})
+    basic_tensor(basic_tensor<OtherTensor> &other) : basic_tensor(other.extents(), container_tag{})
     {
         copy(this->rank(), this->extents().data(), this->data(), this->strides().data(), other.data(),
              other.strides().data());
