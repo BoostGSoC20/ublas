@@ -27,10 +27,12 @@ def make_file_line_lookup(diff):
     for file in diff:
         filename = file.target_file[2:]
         lookup[filename] = {}
+        pos = 1
         for hunk in file:
             for line in hunk:
                 if not line.is_removed:
-                    lookup[filename][line.target_line_no] = line.diff_line_no - 5
+                    lookup[filename][line.target_line_no] = pos
+                    pos += 1
     print(lookup)
     return lookup
 
