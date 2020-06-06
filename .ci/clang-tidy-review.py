@@ -32,7 +32,8 @@ def make_file_line_lookup(diff):
             for line in hunk:
                 if not line.is_removed:
                     lookup[filename][line.target_line_no] = pos
-                    pos += 1
+                pos += 1
+            pos += 1
     print(lookup)
     return lookup
 
