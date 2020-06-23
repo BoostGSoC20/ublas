@@ -153,7 +153,7 @@ def post_review(reports, pr_handle):
     comments = pr_handle.get_review_comments()
     for comment in comments:
         target = (comment.path, comment.position, comment.body)
-        if target in comments:
+        if target in reports:
             reports.remove((comment.path, comment.position, comment.body))
 
     if len(reports) == 0:
