@@ -157,7 +157,7 @@ def post_review(reports, pr_handle):
             reports.remove((comment.path, comment.position, comment.body))
 
     if len(reports) == 0:
-        comment_lgtm()
+        comment_lgtm(pr_handle)
     else:
         comments = []
         for report in reports:
