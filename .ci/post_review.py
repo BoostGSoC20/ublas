@@ -13,7 +13,7 @@
 # third-parties to whom the Software is furnished to do so, all
 # subject to the following:
 
-# 1. The copyright notices in the Software and this entire statement,
+# The copyright notices in the Software and this entire statement,
 # including the above license grant, this restriction and the following
 # disclaimer, must be included in all copies of the Software, in whole
 # or in part, and all derivative works of the Software, unless such copies
