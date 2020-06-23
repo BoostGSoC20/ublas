@@ -31,5 +31,5 @@ jobs:
           pip3 install 'PyGithub~=1.51' --force-reinstall
           pip3 install 'requests~=2.23' --force-reinstall
 
-          python ./ci/post_review.py --repository ${{ github.repository }} --token ${{ github.token}} --pr ${{ github.event.pull_request.number }} --path reports.txt
+          python ./.ci/post_review.py --repository ${{ github.repository }} --token ${{ github.token}} --pr ${{ github.event.pull_request.number }} --path reports.txt
 
