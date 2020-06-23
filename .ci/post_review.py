@@ -34,7 +34,6 @@ import unidiff
 import os
 import requests
 
-pp = pprint.PrettyPrinter().pprint
 
 def fetch_diff(repository, pr, token):
     headers = {
@@ -55,16 +54,18 @@ def parse_report_file(content):
     i = 0
     while (i < n):
         if "error" in content[i] or "warning" in content[i]:
-            abs_file_path, line_number, _, severity, message = content[i].split(":", maxsplit=4)
+            abs_file_path, line_number, _, severity, message = content[i].split(
+                ":", maxsplit=4)
             relative_path = os.path.relpath(abs_file_path, root_path)
 
             k = 1
             body = ""
             while i+k < n and not ("error" in content[i+k] or "warning" in content[i+k]):
-                body += "\n" + content[i+k].replace(abs_file_path, relative_path)
+                body += "\n" + content[i +
+                                       k].replace(abs_file_path, relative_path)
                 k += 1
             i += k
-            
+
             message = message.strip().replace("'", "`")
             body = body.strip()
 
@@ -77,11 +78,12 @@ Reported as{severity} by clang-tidy.
             parsed_report.append((relative_path, line_number, comment_text))
     return parsed_report
 
+
 def file_filter_report(reports, diff):
     changed_files = []
     for file in diff:
         changed_files.append(file.target_file[2:])
-    
+
     filtered_report = []
     for report in reports:
         rel_path, line_number, comment_text = report
@@ -89,6 +91,7 @@ def file_filter_report(reports, diff):
             filtered_report.append(report)
 
     return filtered_report
+
 
 def line_filter_report(reports, diff):
     files_in_report = [i[0] for i in reports]
@@ -102,7 +105,8 @@ def line_filter_report(reports, diff):
                     if line.is_added:
                         if file.target_file[2:] not in lookup:
                             lookup[file.target_file[2:]] = list()
-                        lookup[file.target_file[2:]].append(int(line.target_line_no))
+                        lookup[file.target_file[2:]].append(
+                            int(line.target_line_no))
 
     for report in reports:
         fileName, number, _ = report
@@ -111,6 +115,7 @@ def line_filter_report(reports, diff):
             filtered_report.append(report)
 
     return filtered_report
+
 
 def line_to_position(reports, diff):
     lookup = {}
@@ -131,6 +136,7 @@ def line_to_position(reports, diff):
 
     return new_reports
 
+
 def comment_lgtm(pr_handle):
     lgtm = 'This Pull request Passed all of clang-tidy tests. :+1:'
     comments = pr_handle.get_issue_comments()
@@ -139,7 +145,7 @@ def comment_lgtm(pr_handle):
         if comment == lgtm:
             print("Already posted LGTM!!")
             return
-    
+
     pr_handle.create_issue_comment(lgtm)
 
 
@@ -149,14 +155,15 @@ def post_review(reports, pr_handle):
         target = (comment.path, comment.position, comment.body)
         if target in comments:
             reports.remove((comment.path, comment.position, comment.body))
-    
+
     if len(reports) == 0:
         comment_lgtm()
     else:
         comments = []
         for report in reports:
-            comments.append({"path": report[0],"position": report[1], "body": report[2]})
-        
+            comments.append(
+                {"path": report[0], "position": report[1], "body": report[2]})
+
         review = {
             "body": "Reports by clang tidy",
             "event": "COMMENT",
@@ -166,6 +173,7 @@ def post_review(reports, pr_handle):
         pr_handle.create_review(**review)
         print("Review comments are on its way!")
 
+
 def main(pathToClangReport, repository, pr, token):
     f = open(pathToClangReport)
     lines = f.read().splitlines()
@@ -173,9 +181,11 @@ def main(pathToClangReport, repository, pr, token):
 
     reports = parse_report_file(lines)
     diff = fetch_diff(repository, pr, token)
-    reports = file_filter_report(reports, diff) # Filter the report, So that only changed files are commented
-    reports = line_filter_report(reports, diff) # Fileter the reports, So that only changed lines are commented
-    
+    # Filter the report, So that only changed files are commented
+    reports = file_filter_report(reports, diff)
+    # Fileter the reports, So that only changed lines are commented
+    reports = line_filter_report(reports, diff)
+
     github = Github(token)
     repo = github.get_repo(f"{repository}")
     pr_handle = repo.get_pull(pr)
@@ -184,6 +194,7 @@ def main(pathToClangReport, repository, pr, token):
         comment_lgtm(pr_handle)
     else:
         post_review(line_to_position(reports, diff), pr_handle)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -195,7 +206,8 @@ if __name__ == "__main__":
         "--repository", help="Pass repositor on Github with owner/repo format", required=True)
     parser.add_argument(
         "--pr", help="The repository's PR number to perform review", type=int, required=True)
-    parser.add_argument("--token", help="Github authentication token", required=True)
+    parser.add_argument(
+        "--token", help="Github authentication token", required=True)
 
     args = parser.parse_args()
 
