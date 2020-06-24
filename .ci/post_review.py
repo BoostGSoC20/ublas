@@ -2,8 +2,7 @@
 
 # Automatically create review from clang-tidy report
 # Copyright (c) 2020 Ashar Khan <ashar786khan.at.gmail.com>
-Licensed under Boost Software License 1.0
-
+# Licensed under Boost Software License 1.0
 
 import argparse
 from github import Github
