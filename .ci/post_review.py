@@ -142,7 +142,7 @@ def comment_lgtm(pr_handle):
     comments = pr_handle.get_issue_comments()
 
     for comment in comments:
-        if comment == lgtm:
+        if comment.body == lgtm:
             print("Already posted LGTM!!")
             return
 
