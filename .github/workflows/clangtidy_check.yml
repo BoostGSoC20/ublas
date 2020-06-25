@@ -15,13 +15,16 @@ jobs:
       
       - name: "Install Boost from Source" 
         run: |
+          cd ..
           git clone --depth 1 https://github.com/boostorg/boost.git --recursive --shallow-submodules
           cd boost
           ./bootstrap.sh --prefix=/usr/
           ./b2 headers
           ls boost/
-          sudo cp -r boost/ /usr/include/
+          sudo cp boost /usr/include
           rm -rf boost
+          ls /usr/include
+          ls /usr/include/boost
       
       - name: "Run clang-tidy check"
         run: |
