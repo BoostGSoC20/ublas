@@ -15,11 +15,14 @@ jobs:
       
       - name: "Install Boost from Source" 
         run: |
+          cd ..
           git clone --depth 1 https://github.com/boostorg/boost.git --recursive --shallow-submodules
           cd boost
           ./bootstrap.sh --prefix=/usr/
           ./b2 headers
-          sudo cp -r boost/ /usr/include/
+          sudo cp -r -L boost /usr/include
+          rm -rf boost
+
       - uses: actions/setup-python@v2
 
       - name: "Run clang-tidy check"
