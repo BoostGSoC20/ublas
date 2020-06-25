@@ -151,7 +151,7 @@ namespace boost::numeric::ublas
                 "error in boost::numeric::ublas::prod(ttv): first "
                 "argument tensor should not be empty.");
 
-        if (b.size() == 0)
+        if (b.empty())
             throw std::length_error(
                 "error in boost::numeric::ublas::prod(ttv): second "
                 "argument vector should not be empty.");
