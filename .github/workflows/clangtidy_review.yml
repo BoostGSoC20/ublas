@@ -19,7 +19,7 @@ jobs:
           cd boost
           ./bootstrap.sh --prefix=/usr/
           ./b2 headers
-          sudo ./b2 install  
+          sudo cp -r boost/ /usr/include/
       - uses: actions/setup-python@v2
 
       - name: "Run clang-tidy check"
