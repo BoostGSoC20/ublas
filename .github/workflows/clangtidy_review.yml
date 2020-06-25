@@ -18,7 +18,7 @@ jobs:
           git clone --depth 1 https://github.com/boostorg/boost.git --recursive --shallow-submodules
           cd boost
           ./bootstrap.sh --prefix=/usr/
-          ./b2
+          ./b2 headers
           sudo ./b2 install  
       - uses: actions/setup-python@v2
 
