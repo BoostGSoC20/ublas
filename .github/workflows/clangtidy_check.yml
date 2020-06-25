@@ -18,8 +18,8 @@ jobs:
           cd ..
           git clone --depth 1 https://github.com/boostorg/boost.git --recursive --shallow-submodules
           cd boost
-
           ./bootstrap.sh --prefix=/usr/
+          ./b2 headers
           ls -l boost/
           sudo cp -r -L boost /usr/include
           rm -rf boost
