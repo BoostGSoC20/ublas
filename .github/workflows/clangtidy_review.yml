@@ -29,8 +29,6 @@ jobs:
       - name: "Post review comments"
         if: always()
         run: |
-          sudo apt-get install clang-tidy-10
-          
           pip3 install 'unidiff~=0.6.0' --force-reinstall
           pip3 install 'PyGithub~=1.51' --force-reinstall
           pip3 install 'requests~=2.23' --force-reinstall
