@@ -20,8 +20,8 @@ jobs:
           cd boost
           ./bootstrap.sh --prefix=/usr/
           ./b2 headers
-          ls boost/
-          sudo cp boost /usr/include
+          ls -l boost/
+          sudo cp -r boost /usr/include
           rm -rf boost
           ls /usr/include
           ls /usr/include/boost
