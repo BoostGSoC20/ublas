@@ -5,16 +5,17 @@ on: [pull_request]
 jobs:
   check:
     name: Clang tidy Review 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
         
       - name: "Install dependencies"
         run: |
+          sudo add-apt-repository ppa:mhier/libboost-latest
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
           sudo apt-get update
           sudo apt-add-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"
-          sudo apt-get install -y clang-10 clang-tidy-10 libboost-all-dev
+          sudo apt-get install -y clang-10 clang-tidy-10 libboost-latest
 
       - uses: actions/setup-python@v2
 
