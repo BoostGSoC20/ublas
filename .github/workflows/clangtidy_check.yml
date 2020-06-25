@@ -20,9 +20,12 @@ jobs:
           ./bootstrap.sh --prefix=/usr/
           ./b2 headers
           sudo cp -r boost/ /usr/include/
+          rm -rf boost
       
       - name: "Run clang-tidy check"
         run: |
+          pwd
+          ls -a
           clang-tidy-10 examples/tensor/*.cpp -- -Iinclude -std=c++17 > reports.txt
 
       - name: "Show clang tidy report"
