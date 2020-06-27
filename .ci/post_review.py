@@ -12,6 +12,9 @@ import requests
 
 
 def fetch_diff(repository, pr, token):
+    """
+    Fetch the diff of PR from repository using Github Authentication token 
+    """
     headers = {
         "Accept": "application/vnd.github.v3.diff",
         "Authorization": f"token {token}",
@@ -24,6 +27,12 @@ def fetch_diff(repository, pr, token):
 
 
 def parse_report_file(content):
+    """
+    Parses clang-tidy stdout content to a list of tuple(relpath, line, comment), this tuple is called reports throughout the docs.
+        relpath: The relative path of source that generated clang-tidy warning or error
+        line: Line number in the above soure to which the error or warning belongs
+        comment: The actual clang-tidy error or warning for above line and source
+    """
     root_path = os.getcwd()
     parsed_report = []
     n = len(content)
@@ -55,6 +64,9 @@ Reported as{severity} by clang-tidy.
 
 
 def file_filter_report(reports, diff):
+    """
+    Filter the reports so that it only contains the reports for files in diff that have changed or been added in the PR
+    """
     changed_files = []
     for file in diff:
         changed_files.append(file.target_file[2:])
@@ -69,6 +81,9 @@ def file_filter_report(reports, diff):
 
 
 def line_filter_report(reports, diff):
+    """
+    Filter the reports so that it only contains the reports for lines in the diff that have been added.
+    """
     files_in_report = [i[0] for i in reports]
     filtered_report = []
 
@@ -93,6 +108,11 @@ def line_filter_report(reports, diff):
 
 
 def line_to_position(reports, diff):
+    """
+    The actual source file line number in report is different from what we need to send to github as review payload.
+    This function converts the clang-tidy generated error or warning line numbers to position in diff, 
+    so that review can be made for position relevant to the PR.
+    """
     lookup = {}
     for file in diff:
         filename = file.target_file[2:]
@@ -113,6 +133,9 @@ def line_to_position(reports, diff):
 
 
 def comment_lgtm(pr_handle):
+    """
+    Posts a LGTM (Looks good to me!) comment in the PR, if PR did not produced new clang-tidy warnings or errors.
+    """
     lgtm = 'This Pull request Passed all of clang-tidy tests. :+1:'
     comments = pr_handle.get_issue_comments()
 
@@ -125,6 +148,9 @@ def comment_lgtm(pr_handle):
 
 
 def post_review(reports, pr_handle):
+    """
+    Posts the reports as review to the PR
+    """
     comments = pr_handle.get_review_comments()
     for comment in comments:
         target = (comment.path, comment.position, comment.body)
@@ -150,6 +176,9 @@ def post_review(reports, pr_handle):
 
 
 def main(pathToClangReport, repository, pr, token):
+    """ 
+    Psudo-Main function, that calls all above functions in order.
+    """
     f = open(pathToClangReport)
     lines = f.read().splitlines()
     f.close()
@@ -172,6 +201,9 @@ def main(pathToClangReport, repository, pr, token):
 
 
 if __name__ == "__main__":
+    """
+    Parses command line arguments for the script and calls main function with the script.
+    """
     parser = argparse.ArgumentParser(
         description="Create review from clang tidy file")
     parser.add_argument(
