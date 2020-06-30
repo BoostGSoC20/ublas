@@ -61,6 +61,7 @@ Distributed under the [Boost Software License, Version 1.0](http://www.boost.org
 |   ADD Sanitizer    |  GCC and Clang  | `"-g -fsanitize=address -fno-omit-frame-pointer"` |
 |     Clang Tidy     |  Clang-Tidy-10  |         [Configuration File](.clang-tidy)         |
 |    Clang Format    | Clang-Format-10 |        [Configuration File](.clang-format)        |
+|      Codecov       |  gcov 9.3.0     |         No Branch Coverage & only tensor module   | 
 
 
 
