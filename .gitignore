@@ -1,4 +1,6 @@
 .vscode/
 .DS_Store
 build/
+cmake-build-debug/
+.idea/
 compile_commands.json
