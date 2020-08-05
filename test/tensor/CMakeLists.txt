@@ -35,8 +35,7 @@ add_executable(
           test_static_operators_arithmetic.cpp
           test_static_operators_comparison.cpp
           test_static_expression_evaluation.cpp
-          test_static_tensor_matrix_vector.cpp
-          test_static_functions.cpp)
+          test_static_tensor_matrix_vector.cpp)
 
 add_executable(
 	test_fixed_rank_tensor
